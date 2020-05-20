@@ -4,15 +4,24 @@
     <meta charset="UTF-8">
     <title>My Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.2/css/bulma.css" />
     <script src="script.js"></script>
+    <script type="module" src="./components/card-element.js"></script>
   </head>
   <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
-    </div>
+    <section class="hero">
+        <div class="hero-body">
+            <div class="container" id="content">
+                <h1 class="title">Grace Luo</h1>
+                <p>This is my portfolio.</p>
+                <p>Click here to get a random message:</p>
+                <button onclick="addRandomGreeting()">Hello</button>
+                <div id="greeting-container"></div>
+                <div class="card">
+                    <card-element></card-element>
+                </div>    
+            </div>
+        </div>
+    </section>
   </body>
 </html>
