@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Copyright 2019 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,4 +26,20 @@ function addRandomGreeting() {
   // Add it to the page.
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
+
+/*
+	White out screen while backgrounds scripts are loading.
+*/
+document.onreadystatechange = function () {
+  var state = document.readyState
+  if (state == 'interactive') {
+       document.getElementById('content').style.visibility="hidden";
+  } else if (state == 'complete') {
+      setTimeout(function(){
+         document.getElementById('interactive');
+         document.getElementById('load').style.visibility="hidden";
+         document.getElementById('content').style.visibility="visible";
+      },1000);
+  }
+
 }
