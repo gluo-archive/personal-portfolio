@@ -2,17 +2,33 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Grace Luo</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.2/css/bulma.css" />
+    <script type="module" src="./components/project-card.js"></script>
   </head>
   <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+    <div class="container" id="content">
+      <h1 class="title">Grace Luo</h1>
+      <div class="columns">
+        <div class="column">
+          <p>Hi! I'm Grace, a second-year UC Berkeley EECS student and summer STEP intern. Some fun facts about me:</p>
+          <br>
+          <dl>
+            <li>I play the ukulele and sing</li>
+            <li>My favorite pens are Pilot Juice Up, Uniball Signo, and Muji Gel Ink Ballpoint</li>
+            <li>I've placed first internationally in DECA's automotive services marketing event</li>
+            <li>My favorite country is New Zealand (I've been to Hobbiton, sheep farms, and a town with a lot of roundabouts)</li>
+            <li>I do small art projects like weaving a paracord handle for my water bottle or creating digital art on my tablet</li>
+          </dl>
+        </div>
+        <div class="column">
+          <img src="./assets/profile.jpg">
+        </div>
+      </div>
+      <div class="card">
+        <project-card></project-card>
+      </div>
     </div>
   </body>
 </html>
