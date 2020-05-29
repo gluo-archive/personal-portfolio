@@ -29,7 +29,7 @@ export function flatten(arr) {
 }
 
 export function containsElement(obj, el) {
-	if (obj.constructor === Array) {
+  if (obj.constructor === Array) {
     return obj.indexOf(el) > -1;
   } else if (obj.constructor === Set) {
     return obj.has(el);
