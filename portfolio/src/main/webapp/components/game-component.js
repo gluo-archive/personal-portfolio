@@ -50,7 +50,7 @@ export class GameComponent extends LitElement {
         <p class="title">WordGroup Game</p>
         <p>If you think that certain tiles are associated, click on them to create a group! 
         Groups range from size 1 to ${this.boardLength}. Please wait until the board has finished building 
-        if the cards display ${this.placeholder}. </p>
+        if the cards display "${this.placeholder}". </p>
         <p class="has-text-danger">${this.errorMessage}</p>
         <div id="board">
           <div class="columns">
@@ -89,8 +89,6 @@ export class GameComponent extends LitElement {
         this.selectedSet = new Set(wordArray);
       }
     }
-    this.colorTile(newWord);
-    console.log(this.selectedSet);
   }
 
   changeGroup(action, group) {
@@ -142,7 +140,8 @@ export class GameComponent extends LitElement {
       this.selectedWords.add(newWord);
       if(this.selectedSet.size === 0) {
         this.findGroup(newWord);
-      } else if (equalSets(this.selectedWords, this.selectedSet)) {
+      }
+      if (equalSets(this.selectedWords, this.selectedSet)) {
         this.colorTile(newWord);
         this.lockGroup();
       } else if (containsElement(this.selectedSet, newWord)) {
@@ -176,13 +175,15 @@ export class GameComponent extends LitElement {
     let numFreeTiles = this.boardLength * this.boardLength;
     for (const topic of this.baseWords) {
       if (numFreeTiles > 0) {
-        let maxSize = Math.min(numFreeTiles, randomInt(2, this.boardLength)); 
+        let maxSize = Math.min(numFreeTiles, randomInt(1, this.boardLength)); 
         let groupURL = "https://api.datamuse.com/words?topics=" + topic + "&max=" + maxSize; 
         let newGroup = await this.collectWords(groupURL);
-        this.wordArrays.push(newGroup);
-        numFreeTiles -= newGroup.length;
-        const index = this.baseWords.indexOf(topic);
-        this.baseWords.splice(index, 1);
+        if (newGroup && newGroup.length > 0) {
+          this.wordArrays.push(newGroup);
+          numFreeTiles -= newGroup.length;
+          const index = this.baseWords.indexOf(topic);
+          this.baseWords.splice(index, 1);
+        }
       }
     }
   } 
@@ -190,6 +191,7 @@ export class GameComponent extends LitElement {
   async newBoard() {
     this.groupsSolved = 0;
     this.board = [];
+    this.wordArrays = [];
     for (let i=1; i<=this.boardLength * this.boardLength; i++) {
       this.board.push(this.placeholder)
     }
