@@ -1,5 +1,5 @@
 /*
-	White out screen while backgrounds scripts are loading.
+*	White out screen while backgrounds scripts are loading.
 */
 document.onreadystatechange = function () {
   var state = document.readyState
