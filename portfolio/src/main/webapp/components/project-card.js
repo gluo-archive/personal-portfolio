@@ -1,6 +1,6 @@
 /**
-    Card that displays project experiences.
- */
+*    Card that displays project experiences.
+*/
 import {ToggleCard} from './toggle-card.js';
 
 export class ProjectCard extends ToggleCard {
