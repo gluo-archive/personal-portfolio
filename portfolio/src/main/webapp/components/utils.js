@@ -1,14 +1,14 @@
 export function equalSets(setA, setB) {
-    if (setA.size !== setB.size) { 
+  if (setA.size !== setB.size) { 
+    return false;
+  }
+  for (let a of setA) {
+    if (!setB.has(a)) {
       return false;
     }
-    for (let a of setA) {
-      if (!setB.has(a)) {
-        return false;
-      }
-    }
-    return true;
   }
+  return true;
+}
 
 // Return random int between min (inclusive) and max (exclusive)
 export function randomInt(min, max) {
@@ -36,6 +36,10 @@ export function containsElement(obj, el) {
   } else {
     throw new Error("Unimplemented data type for containsElement.");
   }
+}
+
+export function isIterable (obj) {
+  return Symbol.iterator in Object(obj);
 }
 
 // Read a local txt
