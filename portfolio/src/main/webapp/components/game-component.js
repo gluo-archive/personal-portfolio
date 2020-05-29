@@ -1,6 +1,7 @@
 /**
-    Game. 
- */
+*    WordGroup game. Pulls words from nouns.txt as base words, then uses them as search topics in the DataMuse API. 
+*    The user clicks on words they think are associated.  
+*/
 import {LitElement, html} from 'https://unpkg.com/@polymer/lit-element/lit-element.js?module';
 import {equalSets, randomInt, shuffle, flatten, containsElement, readTxt, fetchJSON} from './utils.js';
 
@@ -36,7 +37,7 @@ export class GameComponent extends LitElement {
     this.solvedColors = ["#e67e22", "#8e44ad", "#2ecc71", "#e74c3c", "#f1c40f", "#16a085", "#d35400", "#9b59b6", "#c0392b"];
     this.defaultColor = "#ffffff";
   
-  	this.initializeBaseWords();
+    this.initializeBaseWords();
     this.newBoard();
   }
 
@@ -82,17 +83,17 @@ export class GameComponent extends LitElement {
     `;
   }
 
-	findGroup(newWord) {
+  findGroup(newWord) {
     for(const wordArray of this.wordArrays) {
       if(wordArray.containsElement(newWord)) {
-      	this.selectedSet = new Set(wordArray);
+        this.selectedSet = new Set(wordArray);
       }
     }
     this.colorTile(newWord);
     console.log(this.selectedSet);
   }
 
-	changeGroup(action, group) {
+  changeGroup(action, group) {
     console.log(group);
     for (const word of group) {
       let tile = this.shadowRoot.getElementById(word);
@@ -126,7 +127,7 @@ export class GameComponent extends LitElement {
     this.gamesSolved += 1;
     console.log(this.board);
     this.changeGroup("void", this.board);
-  	this.newBoard();
+    this.newBoard();
   }
 
   handleSelection(newWord) {
@@ -148,7 +149,7 @@ export class GameComponent extends LitElement {
     }
   }
 
-	initializeBaseWords() {
+  initializeBaseWords() {
     let nounList = readTxt("../assets/nouns.txt");
     this.baseWords = nounList.split("\n");
     this.baseWords = shuffle(this.baseWords);
@@ -164,7 +165,7 @@ export class GameComponent extends LitElement {
     }
   }	
   
-	async createwordArrays() {
+  async createwordArrays() {
     let numFreeTiles = this.boardLength * this.boardLength;
     for (const topic of this.baseWords) {
       if (numFreeTiles > 0) {
