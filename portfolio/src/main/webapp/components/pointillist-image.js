@@ -20,7 +20,7 @@ function draw() {
 }
 
 class PointillistImage {
-  constructor(imgPath, pointSize, batchSize, canvasParent){
+  constructor(imgPath, pointSize, batchSize, canvasParent) {
     this.imgPath = imgPath;
     this.pointSize = pointSize;
     this.batchSize = batchSize;
