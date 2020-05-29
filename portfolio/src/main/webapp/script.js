@@ -2,7 +2,7 @@
 *	White out screen while backgrounds scripts are loading.
 */
 document.onreadystatechange = function() {
-	var state = document.readyState
+	var state = document.readyState;
   if (state == 'interactive') {
   	document.getElementById('content').style.visibility="hidden";
   } else if (state == 'complete') {
