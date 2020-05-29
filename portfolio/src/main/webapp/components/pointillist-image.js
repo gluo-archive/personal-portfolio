@@ -1,7 +1,7 @@
 /*
-  Reconstructs an image using coarser pixels. If there are multiple pointillist images to be rendered, 
-  simply instantiate multiple instances of the PointillistImage class in the preload() function.
-  Built using P5, an open-source library for animation and drawing under the GNU Lesser General Public License.
+*  Reconstructs an image using coarser pixels. If there are multiple pointillist images to be rendered, 
+*  simply instantiate multiple instances of the PointillistImage class in the preload() function.
+*  Built using P5, an open-source library for animation and drawing under the GNU Lesser General Public License.
 */
 
 let pointillistName;
@@ -20,7 +20,7 @@ function draw() {
 }
 
 class PointillistImage {
-  constructor(imgPath, pointSize, batchSize, canvasParent){
+  constructor(imgPath, pointSize, batchSize, canvasParent) {
     this.imgPath = imgPath;
     this.pointSize = pointSize;
     this.batchSize = batchSize;
