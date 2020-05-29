@@ -68,7 +68,7 @@ export class GameComponent extends LitElement {
                 ${boardIndices.map(j => {
                   let boardWord = this.board[this.boardLength*i+j];
                   return html`
-                    <button class="tile card" id=${boardWord} @click=${() => this.handleSelection(this.board[this.boardLength*i+j])}>
+                    <button class="tile card" id=${boardWord} @click=${() => this.handleSelection(boardWord)}>
                       <div class="card-content">
                         <p>${boardWord}</p>
                       </div>
