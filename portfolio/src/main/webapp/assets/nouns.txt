@@ -10,7 +10,6 @@ abdomen
 ability
 abnormality
 abolishment
-abortion
 abrogation
 absence
 abundance
@@ -4390,7 +4389,6 @@ pendulum
 penguin
 penicillin
 peninsula
-penis
 pennant
 penny
 pension
