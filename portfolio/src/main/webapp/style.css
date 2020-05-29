@@ -3,6 +3,14 @@
   width: 650px;
 }
 
+#name {
+  height: 50px;
+}
+
+#profile {
+  max-height: 300px;
+}
+
 #greeting-container {
   margin-top: 20px;
 }

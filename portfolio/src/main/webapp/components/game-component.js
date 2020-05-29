@@ -34,7 +34,9 @@ export class GameComponent extends LitElement {
     this.placeholder = "--";
     this.errorMessage = "";
 
-    this.solvedColors = ["#e67e22", "#8e44ad", "#2ecc71", "#e74c3c", "#f1c40f", "#16a085", "#d35400", "#9b59b6", "#c0392b"];
+    // Colors that differentiate each word group once the user guesses them correctly.
+    // Cycles through if there are more groups than colors. 
+    this.solvedColors = ["#B3E5FC", "#FFECB3", "#D1C4E9", "#C8E6C9", "#FFF9C4", "#FFE0B2", "#DCEDC8", "#B2DFDB", "#F8BBD0"];
     this.defaultColor = "#ffffff";
   
     this.initializeBaseWords();
@@ -70,7 +72,7 @@ export class GameComponent extends LitElement {
                   return html`
                     <button class="tile card" id=${boardWord} @click=${() => this.handleSelection(boardWord)}>
                       <div class="card-content">
-                        <p>${boardWord}</p>
+                        <p class="is-size-6">${boardWord}</p>
                       </div>
                     </button>
                   `
