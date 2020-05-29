@@ -47,26 +47,26 @@ export class GameComponent extends LitElement {
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.2/css/bulma.css" />
       <link rel="stylesheet" href="style.css">            
       <div>
-      	<p class="title">WordGroup Game</p>
+        <p class="title">WordGroup Game</p>
         <p>If you think that certain tiles are associated, click on them to create a group! 
         Groups range from size 1 to ${this.boardLength}. Please wait until the board has finished building 
         if the cards display ${this.placeholder}. </p>
         <p class="has-text-danger">${this.errorMessage}</p>
-      	<div id="board">
+        <div id="board">
           <div class="columns">
-          	<div class="column">
-        			<p>Games solved: ${this.gamesSolved}</p>
+            <div class="column">
+        		  <p>Games solved: ${this.gamesSolved}</p>
               <p>Groups found this game: ${this.numSolved}</p>
             </div>
             <div class="column">
-        			<button class="button is-link is-pulled-right" @click=${this.newBoard}> New Board </button>
+        		  <button class="button is-link is-pulled-right" @click=${this.newBoard}> New Board </button>
             </div>
           </div>
           ${boardIndices.map(i =>
             html`
               <div class="tile is-ancestor">
                 ${boardIndices.map(j => {
-                	let boardWord = this.board[this.boardLength*i+j];
+                  let boardWord = this.board[this.boardLength*i+j];
                   return html`
                     <button class="tile card" id=${boardWord} @click=${() => this.handleSelection(this.board[this.boardLength*i+j])}>
                       <div class="card-content">
