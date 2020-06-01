@@ -9,6 +9,7 @@
     <script type="module" src="./components/game-component.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
     <script src="./components/pointillist-image.js"></script>
+    <script src="./script.js"></script>
   </head>
   <body>
     <div id="load"></div>
@@ -31,9 +32,11 @@
       <div class="card">
         <project-card></project-card>
       </div>
-      <div id="gameContainer">
+      <div id="game-container">
         <game-component></game-component>
       </div>
+      <button class="button is-link" onClick="getServletData()">Click button to get servlet data!</button>
+      <div id="message-container"></div>
     </div>
   </body>
 </html>
