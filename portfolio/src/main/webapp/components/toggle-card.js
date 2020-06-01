@@ -1,7 +1,7 @@
 /**
-    Card that toggles between different text descriptions based on the link clicked.
-    The html includes a css reference since LitElement creates a shadow DOM that doesn't listen to any external css. 
- */
+*    Card that toggles between different text descriptions based on the link clicked.
+*    The html includes a css reference since LitElement creates a shadow DOM that doesn't listen to any external css. 
+*/
 import {LitElement, html} from 'https://unpkg.com/@polymer/lit-element/lit-element.js?module';
 
 export class ToggleCard extends LitElement {
