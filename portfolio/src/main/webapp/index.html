@@ -11,32 +11,41 @@
     <script src="./components/pointillist-image.js"></script>
     <script src="./script.js"></script>
   </head>
-  <body>
-    <div id="load"></div>
-    <div class="container" id="content">
-      <h1 class="title" id="name"></h1>
-      <div class="columns">
-        <div class="column">
-          <p>Hi! I'm Grace, a second-year UC Berkeley EECS student and summer STEP intern. Some fun facts about me:</p>
-          <br>
-          <dl>
-            <li>I've placed first internationally in DECA's automotive services marketing event</li>
-            <li>My favorite country is New Zealand (I've been to Hobbiton, sheep farms, and a town with a lot of roundabouts)</li>
-            <li>I do small art projects like weaving a paracord handle for my water bottle or creating digital art on my tablet</li>
-          </dl>
+  <body onload="getServletData()">
+    <div class="container columns" id="content">
+      <div class="column is-three-quarters">
+        <h1 class="title" id="name"></h1>
+        <div class="columns">
+          <div class="column">
+            <p>Hi! I'm Grace, a second-year UC Berkeley EECS student and summer STEP intern. Some fun facts about me:</p>
+            <br>
+            <dl>
+              <li>I've placed first internationally in DECA's automotive services marketing event</li>
+              <li>My favorite country is New Zealand (I've been to Hobbiton, sheep farms, and a town with a lot of roundabouts)</li>
+              <li>I do small art projects like weaving a paracord handle for my water bottle or creating digital art on my tablet</li>
+            </dl>
+          </div>
+          <div class="column">
+            <img src="./assets/profile.jpg"></img>
+          </div>
         </div>
-        <div class="column">
-          <img src="./assets/profile.jpg"></img>
+        <div class="card">
+          <project-card></project-card>
         </div>
+        <div id="game-container">
+          <game-component></game-component>
+        </div>
+        
       </div>
-      <div class="card">
-        <project-card></project-card>
+      <div class="column is-one-quarter">
+        	<p>Comments</p>
+          <ul id="comment-container"></ul>
+          <form action="/data" method="POST">
+            <textarea name="text-input">Comment</textarea>
+            <br/><br/>
+            <input type="submit" />
+          </form>
       </div>
-      <div id="game-container">
-        <game-component></game-component>
-      </div>
-      <button class="button is-link" onClick="getServletData()">Click button to get servlet data!</button>
-      <ul id="comment-container"></ul>
     </div>
   </body>
 </html>
