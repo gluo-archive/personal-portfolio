@@ -49,7 +49,7 @@ export class GameComponent extends LitElement {
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.2/css/bulma.css" />
       <link rel="stylesheet" href="style.css">            
       <div>
-        <p class="title">WordGroup Game</p>
+        <p class="is-size-4 title">WordGroup Game</p>
         <p>If you think that certain tiles are associated, click on them to create a group! 
         Groups range from size 1 to ${this.boardLength}. Please wait until the board has finished building 
         if the cards display "${this.placeholder}". </p>
