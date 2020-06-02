@@ -20,13 +20,35 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
+import com.google.sps.data.CommentSection;
+
+/** Servlet for comment POST and GET request */
+@WebServlet("/comments")
+public class CommentServlet extends HttpServlet {
+  private CommentSection commentSection = new CommentSection();
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the form.
+    String title = request.getParameter("input-title");
+    String content = request.getParameter("input-content");
+    long timestamp = System.currentTimeMillis();
+
+    if(validInput(title) && validInput(content)) {
+      commentSection.addComment(title, content, timestamp);
+    }
+    
+    response.sendRedirect("/?");
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello world!</h1>");
+    String comments = commentSection.getComments();
+    response.setContentType("application/json;");
+    response.getWriter().println(comments);
+  }
+  
+  private boolean validInput(String str) {
+    return str != null && !str.isEmpty();
   }
 }

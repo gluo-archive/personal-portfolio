@@ -9,30 +9,51 @@
     <script type="module" src="./components/game-component.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
     <script src="./components/pointillist-image.js"></script>
+    <script src="./script.js"></script>
   </head>
-  <body>
-    <div id="load"></div>
-    <div class="container" id="content">
-      <h1 class="title" id="name"></h1>
-      <div class="columns">
-        <div class="column">
-          <p>Hi! I'm Grace, a second-year UC Berkeley EECS student and summer STEP intern. Some fun facts about me:</p>
-          <br>
-          <dl>
-            <li>I've placed first internationally in DECA's automotive services marketing event</li>
-            <li>My favorite country is New Zealand (I've been to Hobbiton, sheep farms, and a town with a lot of roundabouts)</li>
-            <li>I do small art projects like weaving a paracord handle for my water bottle or creating digital art on my tablet</li>
-          </dl>
+  <body onload="getServletData()">
+    <div class="container columns" id="content">
+      <div class="column is-three-quarters" id="content-left">
+        <p id="name"></p>
+        <div class="columns">
+          <div class="column">
+            <p>Hi! I'm Grace, a second-year UC Berkeley EECS student and summer STEP intern. Some fun facts about me:</p>
+            <br>
+            <dl>
+              <li>I've placed first internationally in DECA's automotive services marketing event</li>
+              <li>My favorite country is New Zealand (I've been to Hobbiton, sheep farms, and a town with a lot of roundabouts)</li>
+              <li>I do small art projects like weaving a paracord handle for my water bottle or creating digital art on my tablet</li>
+            </dl>
+          </div>
+          <div class="column">
+            <img src="./assets/profile.jpg"></img>
+          </div>
         </div>
-        <div class="column">
-          <img src="./assets/profile.jpg"></img>
+        <div class="card">
+          <project-card></project-card>
         </div>
+        <div id="game-container">
+          <game-component></game-component>
+        </div>
+        
       </div>
-      <div class="card">
-        <project-card></project-card>
-      </div>
-      <div id="gameContainer">
-        <game-component></game-component>
+      <div class="column is-one-quarter">
+        	<p class="is-size-4 title">Comments</p>
+          <article class="media">
+            <div class="media-content" id="comment-container">
+            </div>
+          </article>
+          <br/>
+          <form action="/comments" method="POST">
+            <div class="field">
+              <textarea class="textarea" placeholder="Name" rows="1" name="input-title"></textarea>
+            </div>
+            <div class="field">              
+              <textarea class="textarea" placeholder="Comment" rows="2" name="input-content"></textarea>
+            </div>
+            <br/>
+            <input class="button is-link" type="submit" />
+          </form>
       </div>
     </div>
   </body>
