@@ -1,6 +1,4 @@
 package com.google.sps.data;
-import java.util.Date;
-import java.text.DateFormat; 
 import java.text.SimpleDateFormat; 
 import java.util.Date; 
 
@@ -20,7 +18,7 @@ public final class Comment {
 
   private String convertMillisToTimestamp(long timestamp) {
     Date date = new Date(timestamp);
-    DateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy hh:mm a"); 
-    return dateFormat.format(timestamp);
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy hh:mm a"); 
+    return dateFormat.format(date);
   }
 }
