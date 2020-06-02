@@ -61,25 +61,27 @@ export class GameComponent extends LitElement {
               <p>Groups found this game: ${this.groupsSolved}</p>
             </div>
             <div class="column">
-        		  <button class="button is-link is-pulled-right" @click=${this.clearGame}> New Game </button>
+              <button class="button is-link is-pulled-right" @click=${this.clearGame}> New Game </button>
             </div>
           </div>
-          ${boardIndices.map(i =>
-            html`
-              <div class="tile is-ancestor">
-                ${boardIndices.map(j => {
-                  let boardWord = this.board[this.boardLength*i+j];
-                  return html`
-                    <button class="tile card" id=${boardWord} @click=${() => this.handleSelection(boardWord)}>
-                      <div class="card-content">
-                        <p class="is-size-6">${boardWord}</p>
-                      </div>
-                    </button>
-                  `
-                })}
-           	  </div>
-            `
-          )}
+          <div class="tile is-ancestor">
+            ${boardIndices.map(i =>
+              html`
+                <div class="tile is-vertical">
+                  ${boardIndices.map(j => {
+                    let boardWord = this.board[this.boardLength*i+j];
+                    return html`
+                      <button class="tile is-vertical card board-card" id=${boardWord} @click=${() => this.handleSelection(boardWord)}>
+                        <div class="card-content">
+                          <p class="is-size-6 board-word">${boardWord}</p>
+                        </div>
+                      </button>
+                    `
+                  })}
+                </div>
+              `
+            )}
+          </div>
         </div>
       </div>
     `;
@@ -170,6 +172,7 @@ export class GameComponent extends LitElement {
       return words;
     } catch(e) {
       this.errorMessage = "Oh no! We couldn't fetch the words from the database. Please try again in 10 minutes.";
+      throw e;
     }
   }	
   
