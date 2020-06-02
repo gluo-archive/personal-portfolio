@@ -22,7 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.sps.data.CommentSection;
 
+<<<<<<< HEAD:portfolio/src/main/java/com/google/sps/servlets/CommentServlet.java
 /** Servlet for comment POST and GET request */
+=======
+/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+>>>>>>> 043f854125897d9042a5f2ea82d8d7dcb8f1aaaf:portfolio/src/main/java/com/google/sps/servlets/CommentServlet.java
 @WebServlet("/comments")
 public class CommentServlet extends HttpServlet {
 	private CommentSection commentSection = new CommentSection();
