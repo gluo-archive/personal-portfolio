@@ -38,7 +38,17 @@
         
       </div>
       <div class="column is-one-quarter">
-        	<p class="is-size-4 title">Comments</p>
+        	<form id="max-comments-form" method="POST">
+            <p class="is-size-4 title">Comments</p>
+            <div class="columns">
+              <div class="column is-three-quarters">
+                <input class="input" placeholder="Max Comments" id="input-max-comments" onchange="updateMaxComments()"></input>
+              </div>
+              <div class="column is-one-quarter">
+                <input class="button is-link is-pulled-right" type="submit" value="✓" />
+              </div>
+            </div>
+          </form>
           <form action="/delete" method="POST">
             <article class="media">
             <div class="media-content" id="comment-container">

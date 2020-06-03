@@ -3,8 +3,9 @@ package com.google.sps.data;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.QueryResultList;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -16,7 +17,14 @@ import java.util.ArrayList;
 
 /** Class that handles the saving and returning of comments, currently implemented with DataStore */
 public class CommentSection {
-  private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  private DatastoreService datastore;
+  private int queryLimit;
+  private int initialQueryLimit = 20;
+
+  public CommentSection() {
+    datastore = DatastoreServiceFactory.getDatastoreService();
+    queryLimit = initialQueryLimit;
+  }
 
   public void addComment(String title, String content, long timestamp) {
     Entity commentEntity = new Entity("Comment");
@@ -26,17 +34,24 @@ public class CommentSection {
     datastore.put(commentEntity);
   }
 
+  public void editMaxComments(int max) {
+    if (max <= initialQueryLimit) {
+      this.queryLimit = max;
+    }
+  }
+
   public void deleteComment(long id) {
     Key taskEntityKey = KeyFactory.createKey("Comment", id);
     datastore.delete(taskEntityKey);
   }
 
   public String getComments() {
+    FetchOptions options = FetchOptions.Builder.withLimit(this.queryLimit);
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
+    QueryResultList<Entity> results = datastore.prepare(query).asQueryResultList(options);
     List<Comment> comments = new ArrayList<Comment>();
 
-    for (Entity entity : results.asIterable()) {
+    for (Entity entity : results) {
       long id = entity.getKey().getId();
       String title = (String) entity.getProperty("title");
       String content = (String) entity.getProperty("content");

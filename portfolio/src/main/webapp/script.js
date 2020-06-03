@@ -1,6 +1,5 @@
 function getServletData() {
-  console.log('running');
-  fetch("/data").then(response => response.json()).then((commentList) => {
+  fetch("/comments").then(response => response.json()).then((commentList) => {
   	const commentContainer = document.getElementById("comment-container");
     console.log(commentList);
     commentContainer.innerHTML = '';
@@ -28,4 +27,9 @@ function createChildComment(container, comment) {
       </div>
     </article>
   `
+}
+
+function updateMaxComments() {
+  let val = document.getElementById("input-max-comments").value;
+  document.getElementById("max-comments-form").setAttribute("action", "/edit?max_comments=" + val);
 }

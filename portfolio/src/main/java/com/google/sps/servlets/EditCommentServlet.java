@@ -21,37 +21,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.sps.data.CommentSection;
+import com.google.sps.servlets.CommentServlet;
 
-/** Servlet for comment POST and GET request */
-@WebServlet("/comments")
-public class CommentServlet extends HttpServlet {
-  private static CommentSection commentSection = new CommentSection();
-
-  public static CommentSection getCommentSection() {
-    return commentSection;
-  }
+@WebServlet("/edit")
+public class EditCommentServlet extends HttpServlet {
+  private static CommentSection commentSection = CommentServlet.getCommentSection();
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Get the input from the form.
-    String title = request.getParameter("input-title");
-    String content = request.getParameter("input-content");
-    long timestamp = System.currentTimeMillis();
-
-    if(validInput(title) && validInput(content)) {
-      commentSection.addComment(title, content, timestamp);
-    }
+    String query = request.getQueryString();
+    String[] queryArr = query.split("=");
+    int queryLimit = Integer.parseInt(queryArr[1]);
+    commentSection.editMaxComments(queryLimit);
     response.sendRedirect("/?");
-  }
-
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String comments = commentSection.getComments();
-    response.setContentType("application/json;");
-    response.getWriter().println(comments);
-  }
-  
-  private boolean validInput(String str) {
-    return str != null && !str.isEmpty();
   }
 }
