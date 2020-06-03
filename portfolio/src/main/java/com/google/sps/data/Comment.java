@@ -1,6 +1,7 @@
 package com.google.sps.data;
 import java.text.SimpleDateFormat; 
 import java.util.Date; 
+import java.util.TimeZone;
 
 public final class Comment {
 
@@ -19,6 +20,7 @@ public final class Comment {
   private String convertMillisToTimestamp(long timestamp) {
     Date date = new Date(timestamp);
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy hh:mm a"); 
+    dateFormat.setTimeZone(TimeZone.getTimeZone("PST"));
     return dateFormat.format(date);
   }
 }

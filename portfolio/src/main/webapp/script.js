@@ -17,7 +17,9 @@ function createChildComment(container, comment) {
     <article class="media">  
       <div class="media-content">
         <p>
-          <strong>${comment.title}</strong> <small>${comment.timestamp}</small>
+          <strong>${comment.title}</strong> 
+          <br>
+          <small class="has-text-grey-light">${comment.timestamp}</small>
           <br>
           ${comment.content}
         </p>
