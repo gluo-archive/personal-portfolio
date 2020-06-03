@@ -1,6 +1,7 @@
 /**
 *    Card that toggles between different text descriptions based on the link clicked.
 *    The html includes a css reference since LitElement creates a shadow DOM that doesn't listen to any external css. 
+*    Description must fit within a 200px tall box.
 */
 import {LitElement, html} from 'https://unpkg.com/@polymer/lit-element/lit-element.js?module';
 
@@ -13,6 +14,7 @@ export class ToggleCard extends LitElement {
       tags: {type: Array}
     };
   }
+
   constructor() {
     super();
     this.items = [];
@@ -23,7 +25,8 @@ export class ToggleCard extends LitElement {
 
   render() {
     return html`        
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.2/css/bulma.css" />            
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.2/css/bulma.css" />
+      <link rel="stylesheet" href="style.css">               
       <div>
         <header class="card-header">
           <p class="card-header-title">Project Experience</p>
@@ -31,7 +34,7 @@ export class ToggleCard extends LitElement {
         <div class="card-content">
           <div class="content">
             <p><u>${this.label}</u></p>
-            <p>${this.description}</p>
+            <p class="toggle-description">${this.description}</p>
             <div class="tags">
               ${this.tags.map(tag =>
                 html`<span class="tag is-link is-normal">${tag}</span>`
