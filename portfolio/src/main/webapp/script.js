@@ -16,11 +16,16 @@ function createChildComment(container, comment) {
   div.innerHTML =
   `
     <article class="media">  
-      <p>
-        <strong>${comment.title}</strong> <small>${comment.timestamp}</small>
-        <br>
-        ${comment.content}
-      </p>
+      <div class="media-content">
+        <p>
+          <strong>${comment.title}</strong> <small>${comment.timestamp}</small>
+          <br>
+          ${comment.content}
+        </p>
+      </div>
+      <div class="media-right">
+        <button class="delete" name="delete" value="${comment.id}"></button>
+      </div>
     </article>
   `
 }

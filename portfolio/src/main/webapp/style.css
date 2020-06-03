@@ -38,10 +38,16 @@ dl li{
 }
 
 .board-card {
-  max-width: 150px;
-  min-height: 73px;
+  height: 92px !important;
 }
 
 .board-word {
   word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+}
+
+.toggle-description {
+  height: 200px;
 }

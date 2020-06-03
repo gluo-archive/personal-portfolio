@@ -39,10 +39,12 @@
       </div>
       <div class="column is-one-quarter">
         	<p class="is-size-4 title">Comments</p>
-          <article class="media">
+          <form action="/delete" method="POST">
+            <article class="media">
             <div class="media-content" id="comment-container">
             </div>
           </article>
+          </form>
           <br/>
           <form action="/comments" method="POST">
             <div class="field">
