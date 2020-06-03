@@ -27,7 +27,6 @@ public class CommentSection {
   }
 
   public void deleteComment(long id) {
-    //long id = Long.parseLong(request.getParameter("id"));
     Key taskEntityKey = KeyFactory.createKey("Comment", id);
     datastore.delete(taskEntityKey);
   }
