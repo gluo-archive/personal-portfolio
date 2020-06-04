@@ -21,10 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.sps.data.CommentSection;
+import com.google.sps.servlets.CommentServlet;
 
 @WebServlet("/delete")
 public class DeleteCommentServlet extends HttpServlet {
-  private CommentSection commentSection = new CommentSection();
+  private static CommentSection commentSection = CommentServlet.getCommentSection();
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
