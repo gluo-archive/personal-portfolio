@@ -10,6 +10,11 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
+
+import java.io.IOException;
 import com.google.gson.Gson;
 import com.google.sps.data.Comment;
 import java.util.List;
@@ -26,12 +31,28 @@ public class CommentSection {
     queryLimit = initialQueryLimit;
   }
 
-  public void addComment(String title, String content, long timestamp) {
+  public void addComment(String title, String content, long timestamp) throws IOException {
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("title", title);
     commentEntity.setProperty("content", content);
     commentEntity.setProperty("timestamp", timestamp);
+    commentEntity.setProperty("sentiment", analyzeSentiment(content));
     datastore.put(commentEntity);
+  }
+
+  public String analyzeSentiment(String text) throws IOException {
+    Document doc = Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    float score = sentiment.getScore();
+    languageService.close();
+    if (score < -0.33) {
+      return "negative";
+    } else if (score <= 0.33) {
+      return "neutral";
+    } else {
+      return "positive";
+    }
   }
 
   public void editMaxComments(int max) {
@@ -58,8 +79,9 @@ public class CommentSection {
       String title = (String) entity.getProperty("title");
       String content = (String) entity.getProperty("content");
       long timestamp = (long) entity.getProperty("timestamp");
+      String sentiment = (String) entity.getProperty("sentiment");
 
-      Comment comment = new Comment(id, title, content, timestamp);
+      Comment comment = new Comment(id, title, content, timestamp, sentiment);
       comments.add(comment);
     }
     

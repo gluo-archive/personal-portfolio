@@ -24,6 +24,17 @@ function convertMillisToTimestamp(millis) {
   return date
 }
 
+function getSentimentIcon(sentiment) {
+  switch(sentiment) {
+    case "positive" :
+      return "🥰"
+    case "negative" :
+      return "🥱"
+    default:
+      return "🤔"
+  }
+}
+
 function createChildComment(container, comment) {
   let div = document.createElement("div");
   container.appendChild(div);
@@ -33,7 +44,7 @@ function createChildComment(container, comment) {
     <article class="media">  
       <div class="media-content">
         <p>
-          <strong>${comment.title}</strong> 
+          <strong>${comment.title}</strong> ${getSentimentIcon(comment.sentiment)}
           <br>
           <small class="has-text-grey-light">${timestamp}</small>
           <br>
