@@ -35,8 +35,10 @@ public class CommentSection {
   }
 
   public void editMaxComments(int max) {
-    if (max <= initialQueryLimit) {
+    if (max < initialQueryLimit) {
       this.queryLimit = max;
+    } else {
+      this.queryLimit = initialQueryLimit;
     }
   }
 
