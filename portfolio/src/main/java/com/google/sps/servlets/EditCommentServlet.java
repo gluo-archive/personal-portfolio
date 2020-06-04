@@ -31,8 +31,14 @@ public class EditCommentServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String query = request.getQueryString();
     String[] queryArr = query.split("=");
-    int queryLimit = Integer.parseInt(queryArr[1]);
-    commentSection.editMaxComments(queryLimit);
+    if (queryArr != null && queryArr.length > 1) {
+      try {
+        int queryLimit = Integer.parseInt(queryArr[1]);
+        commentSection.editMaxComments(queryLimit);
+      } catch(NumberFormatException e) {
+        System.out.println("Please only enter numbers for max comments!");
+      }
+    }
     response.sendRedirect("/?");
   }
 }

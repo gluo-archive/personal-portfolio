@@ -9,9 +9,25 @@ function getServletData() {
   });
 }
 
+function convertMillisToTimestamp(millis) {
+  let date = new Date(millis);
+  let dateOptions = { 
+    weekday: 'short', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    hour: 'numeric', 
+    minute: 'numeric', 
+    hour12: true 
+  }
+  date = date.toLocaleString('en-US', dateOptions)
+  return date
+}
+
 function createChildComment(container, comment) {
-  var div = document.createElement("div");
+  let div = document.createElement("div");
   container.appendChild(div);
+  let timestamp = convertMillisToTimestamp(comment.timestamp);
   div.innerHTML =
   `
     <article class="media">  
@@ -19,7 +35,7 @@ function createChildComment(container, comment) {
         <p>
           <strong>${comment.title}</strong> 
           <br>
-          <small class="has-text-grey-light">${comment.timestamp}</small>
+          <small class="has-text-grey-light">${timestamp}</small>
           <br>
           ${comment.content}
         </p>
