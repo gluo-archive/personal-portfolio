@@ -9,6 +9,7 @@
     <script type="module" src="./components/game-component.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
     <script src="./components/pointillist-image.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="./script.js"></script>
   </head>
   <body onload="getServletData()">
@@ -38,8 +39,8 @@
         
       </div>
       <div class="column is-one-quarter">
-        	<form id="max-comments-form" method="POST">
-            <p class="is-size-4 title">Comments</p>
+          <p class="is-size-4 title">Comments</p>
+        	<form id="max-comments-form" class="max-comments" method="POST">
             <div class="columns">
               <div class="column is-three-quarters">
                 <input class="input" placeholder="Max Comments" id="input-max-comments" onchange="updateMaxComments()"></input>
@@ -66,6 +67,10 @@
             <br/>
             <input class="button is-link" type="submit" />
           </form>
+          <div class="gauge-section">
+            <p class="is-size-7">This rating is estimated from your comments! The more positive the comment, the better the rating.</p>
+            <div id="gauge-chart"></div>
+          </div>
       </div>
     </div>
   </body>
