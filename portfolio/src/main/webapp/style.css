@@ -51,3 +51,13 @@ dl li{
 .toggle-description {
   height: 200px;
 }
+
+.max-comments {
+  margin-bottom: 20px;
+}
+
+.gauge-section {
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+}
