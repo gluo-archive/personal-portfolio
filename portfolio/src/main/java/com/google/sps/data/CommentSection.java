@@ -25,6 +25,8 @@ public class CommentSection {
   private DatastoreService datastore;
   private int queryLimit;
   private int initialQueryLimit = 20;
+  private double negativeThreshold = -0.33;
+  private double positiveThreshold = 0.33;
 
   public CommentSection() {
     datastore = DatastoreServiceFactory.getDatastoreService();
@@ -46,9 +48,9 @@ public class CommentSection {
     Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
     float score = sentiment.getScore();
     languageService.close();
-    if (score < -0.33) {
+    if (score < negativeThreshold) {
       return "negative";
-    } else if (score <= 0.33) {
+    } else if (score <= positiveThreshold) {
       return "neutral";
     } else {
       return "positive";
