@@ -26,7 +26,7 @@ public class CommentSection {
   private int queryLimit;
   private int initialQueryLimit = 20;
   private double negativeThreshold = -0.33;
-  private double positiveTheshold = 0.33;
+  private double positiveThreshold = 0.33;
 
   public CommentSection() {
     datastore = DatastoreServiceFactory.getDatastoreService();
