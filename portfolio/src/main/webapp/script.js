@@ -74,7 +74,6 @@ function getGaugeValue(commentList) {
 }
 
 function drawGauge(commentList) {
-  
   let rating = getGaugeValue(commentList);
   let data = google.visualization.arrayToDataTable([
     ['Label', 'Value'],
