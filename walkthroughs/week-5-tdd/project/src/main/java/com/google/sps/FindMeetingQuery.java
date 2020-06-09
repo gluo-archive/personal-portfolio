@@ -24,13 +24,13 @@ import java.util.HashSet;
 public final class FindMeetingQuery {
   /**Return collection of timeRanges that work given the events all invited attendees are going to.*/
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    List<Event> sortedEvents = new ArrayList<Event>(events);
-    Collections.sort(sortedEvents, Event.ORDER_BY_START);
+    List<Event> eventsList = new ArrayList<Event>(events);
+    Collections.sort(eventsList, Event.ORDER_BY_START);
 
     List<TimeRange> availableTimes = new ArrayList<TimeRange>();
     Set<String> requestAttendees = new HashSet<String>(request.getAttendees());
     TimeRange prevEventTime = null;
-    for (Event currEvent: sortedEvents) {
+    for (Event currEvent: eventsList) {
       Set<String> currAttendees = currEvent.getAttendees();
       if (Collections.disjoint(requestAttendees, currAttendees)) {
         continue;
@@ -41,15 +41,15 @@ public final class FindMeetingQuery {
       } else {
         int start = (prevEventTime == null) ? TimeRange.START_OF_DAY : prevEventTime.end();
         int end = currEventTime.start();
-        availableTimes = addTime(availableTimes, start, end, request.getDuration());
+        addTime(availableTimes, start, end, request.getDuration());
         prevEventTime = currEventTime;
       }
     }
 
     if (prevEventTime != null) {
-      availableTimes = addTime(availableTimes, prevEventTime.end(), TimeRange.END_OF_DAY, request.getDuration());
+      addTime(availableTimes, prevEventTime.end(), TimeRange.END_OF_DAY, request.getDuration());
     } else {
-      availableTimes = addTime(availableTimes, TimeRange.START_OF_DAY, TimeRange.END_OF_DAY, request.getDuration());
+      addTime(availableTimes, TimeRange.START_OF_DAY, TimeRange.END_OF_DAY, request.getDuration());
     }
 
     return availableTimes;
@@ -63,12 +63,13 @@ public final class FindMeetingQuery {
   }
 
   /** Adds available time in a failsafe way. */
-  private List<TimeRange> addTime(List<TimeRange> lst, int start, int end, long minDuration) {
+  private void addTime(List<TimeRange> lst, int start, int end, long minDuration) {
+    boolean hasSufficientTime = end - start >= minDuration;
+    boolean hasSensibleStartEnd = start < end && start >= TimeRange.START_OF_DAY && end <= TimeRange.END_OF_DAY;
     boolean inclusive = (end == TimeRange.END_OF_DAY) ? true : false;
-    if (start < end && end - start >= minDuration && start >= TimeRange.START_OF_DAY && end <= TimeRange.END_OF_DAY) {
+    if (hasSufficientTime && hasSensibleStartEnd) {
       TimeRange newTime = TimeRange.fromStartEnd(start, end, inclusive);
       lst.add(newTime);
     }
-    return lst;
   }
 }
