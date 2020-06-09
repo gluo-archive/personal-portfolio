@@ -64,12 +64,18 @@ public final class FindMeetingQuery {
 
   /** Adds available time in a failsafe way. */
   private void addTime(List<TimeRange> lst, int start, int end, long minDuration) {
-    boolean hasSufficientTime = end - start >= minDuration;
-    boolean hasSensibleStartEnd = start < end && start >= TimeRange.START_OF_DAY && end <= TimeRange.END_OF_DAY;
     boolean inclusive = (end == TimeRange.END_OF_DAY) ? true : false;
-    if (hasSufficientTime && hasSensibleStartEnd) {
+    if (hasSufficientTime(start, end, minDuration) && hasSensibleStartEnd(start, end)) {
       TimeRange newTime = TimeRange.fromStartEnd(start, end, inclusive);
       lst.add(newTime);
     }
+  }
+
+  private boolean hasSufficientTime(int start, int end, long minDuration) {
+    return end - start >= minDuration;
+  }
+
+  private boolean hasSensibleStartEnd(int start, int end) {
+    return start < end && start >= TimeRange.START_OF_DAY && end <= TimeRange.END_OF_DAY;
   }
 }
