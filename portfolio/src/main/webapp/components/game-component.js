@@ -1,19 +1,21 @@
 /**
-*    WordGroup game. Pulls words from nouns.txt as base words, then uses them as search topics in the DataMuse API. 
-*    The user clicks on words they think are associated.  
-*/
-import {LitElement, html} from 'https://unpkg.com/@polymer/lit-element/lit-element.js?module';
-import {equalSets, randomInt, shuffle, flatten, containsElement, isIterable, readTxt, fetchJSON} from './utils.js';
+ *    WordGroup game. Pulls words from nouns.txt as base words, then uses them
+ * as search topics in the DataMuse API. The user clicks on words they think are
+ * associated.
+ */
+import {html, LitElement} from 'https://unpkg.com/@polymer/lit-element/lit-element.js?module';
+
+import {containsElement, equalSets, fetchJSON, flatten, isIterable, randomInt, readTxt, shuffle} from './utils.js';
 
 export class GameComponent extends LitElement {
   static get properties() {
     return {
       boardLength: {type: Number},
       board: {type: Array},
-      wordArrays: {type: Array}, 
-      baseWords: {type: Array}, 
+      wordArrays: {type: Array},
+      baseWords: {type: Array},
       selectedWords: {type: Set},
-      selectedSet: {type: Set}, 
+      selectedSet: {type: Set},
       groupsSolved: {type: Number},
       gamesSolved: {type: Number},
       solvedColors: {type: Array},
@@ -31,14 +33,17 @@ export class GameComponent extends LitElement {
     this.selectedSet = new Set();
     this.groupsSolved = 0;
     this.gamesSolved = 0;
-    this.placeholder = "--";
-    this.errorMessage = "";
+    this.placeholder = '--';
+    this.errorMessage = '';
 
-    // Colors that differentiate each word group once the user guesses them correctly.
-    // Cycles through if there are more groups than colors. 
-    this.solvedColors = ["#B3E5FC", "#FFECB3", "#D1C4E9", "#C8E6C9", "#FFF9C4", "#FFE0B2", "#DCEDC8", "#B2DFDB", "#F8BBD0"];
-    this.defaultColor = "#ffffff";
-  
+    // Colors that differentiate each word group once the user guesses them
+    // correctly. Cycles through if there are more groups than colors.
+    this.solvedColors = [
+      '#B3E5FC', '#FFECB3', '#D1C4E9', '#C8E6C9', '#FFF9C4', '#FFE0B2',
+      '#DCEDC8', '#B2DFDB', '#F8BBD0'
+    ];
+    this.defaultColor = '#ffffff';
+
     this.initializeBaseWords();
     this.newBoard();
   }
@@ -51,7 +56,8 @@ export class GameComponent extends LitElement {
       <div>
         <p class="is-size-4 title">WordGroup Game</p>
         <p>If you think that certain tiles are associated, click on them to create a group! 
-        Groups range from size 1 to ${this.boardLength}. Please wait until the board has finished building 
+        Groups range from size 1 to ${
+        this.boardLength}. Please wait until the board has finished building 
         if the cards display "${this.placeholder}". </p>
         <p class="has-text-danger">${this.errorMessage}</p>
         <div id="board">
@@ -61,26 +67,28 @@ export class GameComponent extends LitElement {
               <p>Groups found this game: ${this.groupsSolved}</p>
             </div>
             <div class="column">
-              <button class="button is-link is-pulled-right" @click=${this.clearGame}> New Game </button>
+              <button class="button is-link is-pulled-right" @click=${
+        this.clearGame}> New Game </button>
             </div>
           </div>
           <div class="tile is-ancestor">
-            ${boardIndices.map(i =>
-              html`
+            ${boardIndices.map(i => html`
                 <div class="tile is-vertical">
                   ${boardIndices.map(j => {
-                    let boardWord = this.board[this.boardLength*i+j];
-                    return html`
-                      <button class="tile is-vertical card board-card" id=${boardWord} @click=${() => this.handleSelection(boardWord)}>
+                                 let boardWord =
+                                     this.board[this.boardLength * i + j];
+                                 return html`
+                      <button class="tile is-vertical card board-card" id=${
+                                     boardWord} @click=${
+                                     () => this.handleSelection(boardWord)}>
                         <div class="card-content">
                           <p class="is-size-6 board-word">${boardWord}</p>
                         </div>
                       </button>
                     `
-                  })}
+                               })}
                 </div>
-              `
-            )}
+              `)}
           </div>
         </div>
       </div>
@@ -88,8 +96,8 @@ export class GameComponent extends LitElement {
   }
 
   findGroup(newWord) {
-    for(const wordArray of this.wordArrays) {
-      if(containsElement(wordArray, newWord)) {
+    for (const wordArray of this.wordArrays) {
+      if (containsElement(wordArray, newWord)) {
         this.selectedSet = new Set(wordArray);
       }
     }
@@ -100,9 +108,9 @@ export class GameComponent extends LitElement {
       for (const word of group) {
         let tile = this.shadowRoot.getElementById(word);
         if (tile) {
-          if (action === "lock") {
+          if (action === 'lock') {
             tile.disabled = true;
-          } else if (action === "void") {
+          } else if (action === 'void') {
             tile.style.background = this.defaultColor;
             tile.disabled = false;
           }
@@ -114,35 +122,36 @@ export class GameComponent extends LitElement {
   }
 
   lockGroup() {
-    this.changeGroup("lock", this.selectedWords);
+    this.changeGroup('lock', this.selectedWords);
     this.groupsSolved += 1;
   }
 
   colorTile(newWord) {
-    let tileColor = this.solvedColors[this.groupsSolved % this.solvedColors.length];
+    let tileColor =
+        this.solvedColors[this.groupsSolved % this.solvedColors.length];
     let tile = this.shadowRoot.getElementById(newWord);
     tile.style.background = tileColor;
   }
 
   voidGroup() {
-    this.changeGroup("void", this.selectedWords);
+    this.changeGroup('void', this.selectedWords);
   }
 
   finishGame() {
     this.gamesSolved += 1;
-    this.changeGroup("void", this.board);
+    this.changeGroup('void', this.board);
     this.newBoard();
   }
 
   clearGame() {
-    this.changeGroup("void", this.board);
+    this.changeGroup('void', this.board);
     this.newBoard();
   }
 
   handleSelection(newWord) {
     if (newWord !== this.placeholder) {
       this.selectedWords.add(newWord);
-      if(this.selectedSet.size === 0) {
+      if (this.selectedSet.size === 0) {
         this.findGroup(newWord);
       }
       if (equalSets(this.selectedWords, this.selectedSet)) {
@@ -160,28 +169,30 @@ export class GameComponent extends LitElement {
   }
 
   initializeBaseWords() {
-    let nounList = readTxt("../assets/nouns.txt");
-    this.baseWords = nounList.split("\n");
+    let nounList = readTxt('../assets/nouns.txt');
+    this.baseWords = nounList.split('\n');
     this.baseWords = shuffle(this.baseWords);
   }
 
   async collectWords(url) {
     try {
       let wordArray = await fetchJSON(url);
-      let words = wordArray.map(wordInfo => wordInfo["word"]);
+      let words = wordArray.map(wordInfo => wordInfo['word']);
       return words;
-    } catch(e) {
-      this.errorMessage = "Oh no! We couldn't fetch the words from the database. Please try again in 10 minutes.";
+    } catch (e) {
+      this.errorMessage =
+          'Oh no! We couldn\'t fetch the words from the database. Please try again in 10 minutes.';
       throw e;
     }
-  }	
-  
+  }
+
   async createwordArrays() {
     let numFreeTiles = this.boardLength * this.boardLength;
     for (const topic of this.baseWords) {
       if (numFreeTiles > 0) {
-        let maxSize = Math.min(numFreeTiles, randomInt(1, this.boardLength)); 
-        let groupURL = "https://api.datamuse.com/words?topics=" + topic + "&max=" + maxSize; 
+        let maxSize = Math.min(numFreeTiles, randomInt(1, this.boardLength));
+        let groupURL = 'https://api.datamuse.com/words?topics=' + topic +
+            '&max=' + maxSize;
         let newGroup = await this.collectWords(groupURL);
         if (newGroup && newGroup.length > 0) {
           this.wordArrays.push(newGroup);
@@ -191,13 +202,13 @@ export class GameComponent extends LitElement {
         }
       }
     }
-  } 
+  }
 
   async newBoard() {
     this.groupsSolved = 0;
     this.board = [];
     this.wordArrays = [];
-    for (let i=1; i<=this.boardLength * this.boardLength; i++) {
+    for (let i = 1; i <= this.boardLength * this.boardLength; i++) {
       this.board.push(this.placeholder)
     }
     this.baseWords = shuffle(this.baseWords);
@@ -205,6 +216,5 @@ export class GameComponent extends LitElement {
     this.board = flatten(this.wordArrays);
     this.board = shuffle(this.board);
   }
-  
 }
 customElements.define('game-component', GameComponent);
