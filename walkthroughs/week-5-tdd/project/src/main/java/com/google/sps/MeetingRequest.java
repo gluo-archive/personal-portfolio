@@ -39,14 +39,22 @@ public final class MeetingRequest {
    * Returns a read-only copy of the people who are required to attend this meeting.
    */
   public Collection<String> getAttendees() {
-    return Collections.unmodifiableCollection(attendees);
+    return Collections.unmodifiableCollection(attendeeNullCheck(attendees));
   }
 
   /**
    * Returns a read-only copy of the people who are optional to attend this meeting.
    */
   public Collection<String> getOptionalAttendees() {
-    return Collections.unmodifiableCollection(optional_attendees);
+    return Collections.unmodifiableCollection(attendeeNullCheck(optional_attendees));
+  }
+
+  private Collection<String> attendeeNullCheck(Collection<String> attendees) {
+    if (attendees == null) {
+      return Collections.emptySet();
+    } else {
+      return attendees;
+    }
   }
 
   /**
