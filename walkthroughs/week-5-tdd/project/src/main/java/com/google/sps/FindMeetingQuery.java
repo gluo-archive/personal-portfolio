@@ -24,11 +24,26 @@ import java.util.HashSet;
 public final class FindMeetingQuery {
   /**Return collection of timeRanges that work given the events all invited attendees are going to.*/
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    Collection<TimeRange> withOptionalAttendees = findAvailableTimes(events, request, true);
+    Collection<String> mandatoryAttendees = request.getAttendees();
+    if(withOptionalAttendees.isEmpty() && !mandatoryAttendees.isEmpty()) {
+      Collection<TimeRange> withoutOptionalAttendees = findAvailableTimes(events, request, false);
+      return withoutOptionalAttendees;
+    } else {
+      return withOptionalAttendees;
+    }
+  }
+ 
+  private Collection<TimeRange> findAvailableTimes(Collection<Event> events, MeetingRequest request, boolean withOptionalAttendees) {
     List<Event> eventsList = new ArrayList<Event>(events);
     Collections.sort(eventsList, Event.ORDER_BY_START);
 
     List<TimeRange> availableTimes = new ArrayList<TimeRange>();
     Set<String> requestAttendees = new HashSet<String>(request.getAttendees());
+    if (withOptionalAttendees) {
+    requestAttendees.addAll(request.getOptionalAttendees());
+    }
+
     TimeRange prevEventTime = null;
     for (Event currEvent: eventsList) {
       Set<String> currAttendees = currEvent.getAttendees();
