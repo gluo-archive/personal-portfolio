@@ -17,59 +17,91 @@ package com.google.sps;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public final class FindMeetingQuery {
+  private String MANDATORY = "mandatory";
+  private String OPTIONAL = "optional";
+
   /**Return collection of timeRanges that work given the events all invited attendees are going
    * to.*/
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    Collection<TimeRange> withOptionalAttendees = findAvailableTimes(events, request, true);
-    Collection<String> mandatoryAttendees = request.getAttendees();
-    // If there are no mandatory attendees but all optional attendees, return requests
-    // as if all optional are mandatory
-    if (!mandatoryAttendees.isEmpty() && withOptionalAttendees.isEmpty()) {
-      Collection<TimeRange> withoutOptionalAttendees = findAvailableTimes(events, request, false);
-      return withoutOptionalAttendees;
-    } else {
-      return withOptionalAttendees;
-    }
-  }
-
-  private Collection<TimeRange> findAvailableTimes(
-      Collection<Event> events, MeetingRequest request, boolean withOptionalAttendees) {
     List<Event> eventsList = new ArrayList<Event>(events);
     Collections.sort(eventsList, Event.ORDER_BY_START);
     eventsList.add(null); // Run for loop additional time to account for EOD
+    long duration = request.getDuration();
 
-    List<TimeRange> availableTimes = new ArrayList<TimeRange>();
-    Set<String> requestAttendees = new HashSet<String>(request.getAttendees());
-    if (withOptionalAttendees) {
-      requestAttendees.addAll(request.getOptionalAttendees());
-    }
+    List<TimeRange> mandatoryTimes = new ArrayList<TimeRange>();
+    List<TimeRange> optionalTimes = new ArrayList<TimeRange>();
 
-    TimeRange prevEventTime = null;
-    TimeRange currEventTime = null;
+    Set<String> mandatoryAttendees = new HashSet<String>(request.getAttendees());
+    Set<String> optionalAndMandatoryAttendees = new HashSet<String>(request.getOptionalAttendees());
+    optionalAndMandatoryAttendees.addAll(mandatoryAttendees);
+
+    HashMap<String, TimeRange> prevTime = new HashMap<String, TimeRange>();
+    prevTime.put(MANDATORY, null);
+    prevTime.put(OPTIONAL, null);
+    TimeRange currTime = null;
+    boolean addToMandatory = true;
+    boolean addToOptional = true;
     for (Event currEvent : eventsList) {
-      currEventTime = null;
+      currTime = null;
+      addToMandatory = true;
+      addToOptional = true;
       if (currEvent != null) {
-        currEventTime = currEvent.getWhen();
+        currTime = currEvent.getWhen();
         Set<String> currAttendees = currEvent.getAttendees();
-        if (Collections.disjoint(requestAttendees, currAttendees)) {
-          continue;
-        } else if (prevEventTime != null && prevEventTime.overlaps(currEventTime)) {
-          prevEventTime = combineOverlappingRanges(prevEventTime, currEventTime);
-          continue;
-        }
+        addToMandatory = markOverlappingAttendees(mandatoryAttendees, currAttendees)
+            && markOverlappingRanges(MANDATORY, prevTime, currTime);
+        addToOptional = markOverlappingAttendees(optionalAndMandatoryAttendees, currAttendees)
+            && markOverlappingRanges(OPTIONAL, prevTime, currTime);
       }
-      int start = (prevEventTime == null) ? TimeRange.START_OF_DAY : prevEventTime.end();
-      int end = (currEventTime == null) ? TimeRange.END_OF_DAY : currEventTime.start();
-      addTime(availableTimes, start, end, request.getDuration());
-      prevEventTime = currEventTime;
+      addToList(MANDATORY, mandatoryTimes, prevTime, currTime, duration, addToMandatory);
+      addToList(OPTIONAL, optionalTimes, prevTime, currTime, duration, addToOptional);
     }
 
-    return availableTimes;
+    // Handle edge case where if there are no mandatory,
+    // then all optional are treated like mandatory
+    if (optionalTimes.isEmpty() && !mandatoryAttendees.isEmpty()) {
+      return mandatoryTimes;
+    } else {
+      return optionalTimes;
+    }
+  }
+
+  private boolean markOverlappingAttendees(Set<String> attendees, Set<String> currAttendees) {
+    if (Collections.disjoint(attendees, currAttendees)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private boolean markOverlappingRanges(
+      String key, HashMap<String, TimeRange> prevTime, TimeRange currTime) {
+    TimeRange prev = prevTime.get(key);
+    TimeRange curr = currTime;
+    if (prev != null && prev.overlaps(curr)) {
+      prevTime.put(key, combineOverlappingRanges(prev, curr));
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private void addToList(String key, List<TimeRange> lst, HashMap<String, TimeRange> prevTime,
+      TimeRange currTime, long duration, boolean addTo) {
+    TimeRange prev = prevTime.get(key);
+    TimeRange curr = currTime;
+    if (addTo) {
+      int start = (prev == null) ? TimeRange.START_OF_DAY : prev.end();
+      int end = (curr == null) ? TimeRange.END_OF_DAY : curr.start();
+      addTime(lst, start, end, duration);
+      prevTime.put(key, curr);
+    }
   }
 
   /** Create one big range out of two overlapping ones. */
