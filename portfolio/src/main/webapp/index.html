@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Grace Luo</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.8.2/css/bulma.css" />
     <script type="module" src="./components/project-card.js"></script>
     <script type="module" src="./components/game-component.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.js"></script>
     <script src="./components/pointillist-image.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="./script.js"></script>
   </head>
   <body onload="getServletData()">
@@ -18,16 +18,24 @@
         <p id="name"></p>
         <div class="columns">
           <div class="column">
-            <p>Hi! I'm Grace, a second-year UC Berkeley EECS student and summer STEP intern. Some fun facts about me:</p>
-            <br>
-            <dl>
+            <p>
+              Hi! I'm Grace, a second-year UC Berkeley EECS student and summer STEP intern. Some fun facts about me:
+            </p>
+            <br />
+            <ul>
               <li>I've placed first internationally in DECA's automotive services marketing event</li>
-              <li>My favorite country is New Zealand (I've been to Hobbiton, sheep farms, and a town with a lot of roundabouts)</li>
-              <li>I do small art projects like weaving a paracord handle for my water bottle or creating digital art on my tablet</li>
-            </dl>
+              <li>
+                My favorite country is New Zealand (I've been to Hobbiton, sheep farms, and a town with a lot of
+                roundabouts)
+              </li>
+              <li>
+                I do small art projects like weaving a paracord handle for my water bottle or creating digital art on my
+                tablet
+              </li>
+            </ul>
           </div>
           <div class="column">
-            <img src="./assets/profile.jpg"></img>
+            <img src="./assets/profile.jpg" alt="" />
           </div>
         </div>
         <div class="card">
@@ -36,41 +44,47 @@
         <div id="game-container">
           <game-component></game-component>
         </div>
-        
       </div>
       <div class="column is-one-quarter">
-          <p class="is-size-4 title">Comments</p>
-        	<form id="max-comments-form" class="max-comments" method="POST">
-            <div class="columns">
-              <div class="column is-three-quarters">
-                <input class="input" placeholder="Max Comments" id="input-max-comments" onchange="updateMaxComments()"></input>
-              </div>
-              <div class="column is-one-quarter">
-                <input class="button is-white is-pulled-right" type="submit" value="🐻" />
-              </div>
+        <p class="is-size-4 title">Comments</p>
+        <form id="max-comments-form" class="max-comments" method="POST">
+          <div class="columns">
+            <div class="column is-three-quarters">
+              <input
+                class="input"
+                type="text"
+                placeholder="Max Comments"
+                id="input-max-comments"
+                onchange="updateMaxComments()"
+              />
             </div>
-          </form>
-          <form action="/delete" method="POST">
-            <article class="media">
-            <div class="media-content" id="comment-container">
+            <div class="column is-one-quarter">
+              <input class="button is-white is-pulled-right" type="submit" value="🐻" />
             </div>
-          </article>
-          </form>
-          <br/>
-          <form action="/comments" method="POST">
-            <div class="field">
-              <textarea class="textarea" placeholder="Name" rows="1" name="input-title"></textarea>
-            </div>
-            <div class="field">              
-              <textarea class="textarea" placeholder="Comment" rows="2" name="input-content"></textarea>
-            </div>
-            <br/>
-            <input class="button is-link" type="submit" />
-          </form>
-          <div class="gauge-section">
-            <p class="is-size-7">This rating is estimated from your comments! The more positive the comment, the better the rating.</p>
-            <div id="gauge-chart"></div>
           </div>
+        </form>
+        <form action="/delete" method="POST">
+          <article class="media">
+            <div class="media-content" id="comment-container"></div>
+          </article>
+        </form>
+        <br />
+        <form action="/comments" method="POST">
+          <div class="field">
+            <textarea class="textarea" placeholder="Name" rows="1" name="input-title"></textarea>
+          </div>
+          <div class="field">
+            <textarea class="textarea" placeholder="Comment" rows="2" name="input-content"></textarea>
+          </div>
+          <br />
+          <input class="button is-link" type="submit" />
+        </form>
+        <div class="gauge-section">
+          <p class="is-size-7">
+            This rating is estimated from your comments! The more positive the comment, the better the rating.
+          </p>
+          <div id="gauge-chart"></div>
+        </div>
       </div>
     </div>
   </body>
