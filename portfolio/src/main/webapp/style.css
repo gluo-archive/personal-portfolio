@@ -19,14 +19,14 @@
   margin-top: 20px;
 }
 
-dl li{
+dl li {
   text-indent: -1.3em;
 }
 
 #load {
-    width:100%;
-    height:100%;
-    background: rgba(255,255,255);
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255);
 }
 
 #board {
@@ -34,7 +34,7 @@ dl li{
 }
 
 #game-container {
-	margin: 50px 0 50px 0;
+  margin: 50px 0 50px 0;
 }
 
 .board-card {
@@ -43,8 +43,6 @@ dl li{
 
 .board-word {
   word-wrap: break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
   hyphens: auto;
 }
 

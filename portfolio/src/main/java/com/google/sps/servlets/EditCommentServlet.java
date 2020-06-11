@@ -14,14 +14,13 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.CommentSection;
+import com.google.sps.servlets.CommentServlet;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.sps.data.CommentSection;
-import com.google.sps.servlets.CommentServlet;
 
 @WebServlet("/edit")
 public class EditCommentServlet extends HttpServlet {
@@ -35,7 +34,7 @@ public class EditCommentServlet extends HttpServlet {
       try {
         int queryLimit = Integer.parseInt(queryArr[1]);
         commentSection.editMaxComments(queryLimit);
-      } catch(NumberFormatException e) {
+      } catch (NumberFormatException e) {
         System.out.println("Please only enter numbers for max comments!");
       }
     }

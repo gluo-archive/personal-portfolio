@@ -14,13 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.CommentSection;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.sps.data.CommentSection;
 
 /** Servlet for comment POST and GET request */
 @WebServlet("/comments")
@@ -38,7 +37,7 @@ public class CommentServlet extends HttpServlet {
     String content = request.getParameter("input-content");
     long timestamp = System.currentTimeMillis();
 
-    if(validInput(title) && validInput(content)) {
+    if (validInput(title) && validInput(content)) {
       commentSection.addComment(title, content, timestamp);
     }
     response.sendRedirect("/?");
@@ -50,7 +49,7 @@ public class CommentServlet extends HttpServlet {
     response.setContentType("application/json;");
     response.getWriter().println(comments);
   }
-  
+
   private boolean validInput(String str) {
     return str != null && !str.isEmpty();
   }

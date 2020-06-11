@@ -6,6 +6,10 @@
     "html-validate:recommended"
   ],
   "rules": {
+    "no-conditional-comment": "off",
+    "wcag/h32": "off",
+    "prefer-button": "off",
+    "attribute-allowed-values" : "warn",
     "void-style": "off"
   }
 }

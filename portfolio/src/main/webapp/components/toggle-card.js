@@ -1,9 +1,10 @@
 /**
-*    Card that toggles between different text descriptions based on the link clicked.
-*    The html includes a css reference since LitElement creates a shadow DOM that doesn't listen to any external css. 
-*    Description must fit within a 200px tall box.
-*/
-import {LitElement, html} from 'https://unpkg.com/@polymer/lit-element/lit-element.js?module';
+ *    Card that toggles between different text descriptions based on the link
+ * clicked. The html includes a css reference since LitElement creates a shadow
+ * DOM that doesn't listen to any external css. Description must fit within a
+ * 200px tall box.
+ */
+import {html, LitElement} from 'https://unpkg.com/@polymer/lit-element/lit-element.js?module';
 
 export class ToggleCard extends LitElement {
   static get properties() {
@@ -18,8 +19,8 @@ export class ToggleCard extends LitElement {
   constructor() {
     super();
     this.items = [];
-    this.label = "";
-    this.description = "";
+    this.label = '';
+    this.description = '';
     this.tags = [];
   }
 
@@ -36,16 +37,17 @@ export class ToggleCard extends LitElement {
             <p><u>${this.label}</u></p>
             <p class="toggle-description">${this.description}</p>
             <div class="tags">
-              ${this.tags.map(tag =>
-                html`<span class="tag is-link is-normal">${tag}</span>`
-              )}
+              ${
+        this.tags.map(
+            tag => html`<span class="tag is-link is-normal">${tag}</span>`)}
             </div>
           </div>
         </div>
         <footer class="card-footer">
-          ${this.items.map((item, index) =>
-            html`<a class="card-footer-item" @click=${() => this.toggle(index)}>${item.label}</a>`
-          )}
+          ${
+        this.items.map(
+            (item, index) => html`<a class="card-footer-item" @click=${
+                () => this.toggle(index)}>${item.label}</a>`)}
         </footer>
       </div>
     `;
@@ -56,6 +58,5 @@ export class ToggleCard extends LitElement {
     this.description = this.items[index].description;
     this.tags = this.items[index].tags;
   }
-
 }
 customElements.define('toggle-card', ToggleCard);
