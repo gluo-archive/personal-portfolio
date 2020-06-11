@@ -13,6 +13,9 @@ pretty: node_modules
 	find portfolio/src/main/java -iname *.java | xargs $(CLANG_FORMAT) -i
 	find portfolio/src/main/webapp -iname *.js | xargs $(CLANG_FORMAT) -i
 
+pretty-scheduler: node_modules
+	find walkthroughs/week-5-tdd/project -iname *.java | xargs $(CLANG_FORMAT) -i
+
 validate: node_modules
 	$(HTML_VALIDATE) portfolio/src/main/webapp/*.html
 	$(CSS_VALIDATOR) portfolio/src/main/webapp/*.css
