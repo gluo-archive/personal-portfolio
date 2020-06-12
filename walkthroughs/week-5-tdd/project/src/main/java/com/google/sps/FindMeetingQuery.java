@@ -14,42 +14,59 @@
 
 package com.google.sps;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
 
 public final class FindMeetingQuery {
-  /**Return collection of timeRanges that work given the events all invited attendees are going to.*/
+  /**Return collection of timeRanges that work given the events all invited attendees are going
+   * to.*/
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    Collection<TimeRange> withOptionalAttendees = findAvailableTimes(events, request, true);
+    Collection<String> mandatoryAttendees = request.getAttendees();
+    // If there are no mandatory attendees but all optional attendees, return requests
+    // as if all optional are mandatory
+    if (!mandatoryAttendees.isEmpty() && withOptionalAttendees.isEmpty()) {
+      Collection<TimeRange> withoutOptionalAttendees = findAvailableTimes(events, request, false);
+      return withoutOptionalAttendees;
+    } else {
+      return withOptionalAttendees;
+    }
+  }
+
+  private Collection<TimeRange> findAvailableTimes(
+      Collection<Event> events, MeetingRequest request, boolean withOptionalAttendees) {
     List<Event> eventsList = new ArrayList<Event>(events);
     Collections.sort(eventsList, Event.ORDER_BY_START);
+    eventsList.add(null); // Run for loop additional time to account for EOD
 
     List<TimeRange> availableTimes = new ArrayList<TimeRange>();
     Set<String> requestAttendees = new HashSet<String>(request.getAttendees());
-    TimeRange prevEventTime = null;
-    for (Event currEvent: eventsList) {
-      Set<String> currAttendees = currEvent.getAttendees();
-      if (Collections.disjoint(requestAttendees, currAttendees)) {
-        continue;
-      } 
-      TimeRange currEventTime = currEvent.getWhen();
-      if (prevEventTime != null && prevEventTime.overlaps(currEventTime)) {
-        prevEventTime = combineOverlappingRanges(prevEventTime, currEventTime);
-      } else {
-        int start = (prevEventTime == null) ? TimeRange.START_OF_DAY : prevEventTime.end();
-        int end = currEventTime.start();
-        addTime(availableTimes, start, end, request.getDuration());
-        prevEventTime = currEventTime;
-      }
+    if (withOptionalAttendees) {
+      requestAttendees.addAll(request.getOptionalAttendees());
     }
 
-    if (prevEventTime != null) {
-      addTime(availableTimes, prevEventTime.end(), TimeRange.END_OF_DAY, request.getDuration());
-    } else {
-      addTime(availableTimes, TimeRange.START_OF_DAY, TimeRange.END_OF_DAY, request.getDuration());
+    TimeRange prevEventTime = null;
+    TimeRange currEventTime = null;
+    for (Event currEvent : eventsList) {
+      currEventTime = null;
+      if (currEvent != null) {
+        currEventTime = currEvent.getWhen();
+        Set<String> currAttendees = currEvent.getAttendees();
+        if (Collections.disjoint(requestAttendees, currAttendees)) {
+          continue;
+        } else if (prevEventTime != null && prevEventTime.overlaps(currEventTime)) {
+          prevEventTime = combineOverlappingRanges(prevEventTime, currEventTime);
+          continue;
+        }
+      }
+      int start = (prevEventTime == null) ? TimeRange.START_OF_DAY : prevEventTime.end();
+      int end = (currEventTime == null) ? TimeRange.END_OF_DAY : currEventTime.start();
+      addTime(availableTimes, start, end, request.getDuration());
+      prevEventTime = currEventTime;
     }
 
     return availableTimes;
