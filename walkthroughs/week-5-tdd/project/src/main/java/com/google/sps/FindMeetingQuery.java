@@ -31,7 +31,6 @@ public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     List<Event> eventsList = new ArrayList<Event>(events);
     Collections.sort(eventsList, Event.ORDER_BY_START);
-    eventsList.add(null); // Run for loop additional time to account for EOD
     long duration = request.getDuration();
 
     List<TimeRange> mandatoryTimes = new ArrayList<TimeRange>();
@@ -44,24 +43,22 @@ public final class FindMeetingQuery {
     HashMap<String, TimeRange> prevTime = new HashMap<String, TimeRange>();
     prevTime.put(MANDATORY, null);
     prevTime.put(OPTIONAL, null);
-    TimeRange currTime = null;
-    boolean addToMandatory = true;
-    boolean addToOptional = true;
     for (Event currEvent : eventsList) {
-      currTime = null;
-      addToMandatory = true;
-      addToOptional = true;
-      if (currEvent != null) {
-        currTime = currEvent.getWhen();
-        Set<String> currAttendees = currEvent.getAttendees();
-        addToMandatory = markOverlappingAttendees(mandatoryAttendees, currAttendees)
-            && markOverlappingRanges(MANDATORY, prevTime, currTime);
-        addToOptional = markOverlappingAttendees(optionalAndMandatoryAttendees, currAttendees)
-            && markOverlappingRanges(OPTIONAL, prevTime, currTime);
-      }
+      boolean addToMandatory = true;
+      boolean addToOptional = true;
+      TimeRange currTime = currEvent.getWhen();
+      Set<String> currAttendees = currEvent.getAttendees();
+      addToMandatory = markOverlappingAttendees(mandatoryAttendees, currAttendees)
+          && markDisjointRanges(MANDATORY, prevTime, currTime);
+      addToOptional = markOverlappingAttendees(optionalAndMandatoryAttendees, currAttendees)
+          && markDisjointRanges(OPTIONAL, prevTime, currTime);
       addToList(MANDATORY, mandatoryTimes, prevTime, currTime, duration, addToMandatory);
       addToList(OPTIONAL, optionalTimes, prevTime, currTime, duration, addToOptional);
     }
+
+    // Add the chunk from the last event to end of day
+    addToList(MANDATORY, mandatoryTimes, prevTime, null, duration, true);
+    addToList(OPTIONAL, optionalTimes, prevTime, null, duration, true);
 
     // Handle edge case where if there are no mandatory,
     // then all optional are treated like mandatory
@@ -73,23 +70,18 @@ public final class FindMeetingQuery {
   }
 
   private boolean markOverlappingAttendees(Set<String> attendees, Set<String> currAttendees) {
-    if (Collections.disjoint(attendees, currAttendees)) {
-      return false;
-    } else {
-      return true;
-    }
+    return !Collections.disjoint(attendees, currAttendees);
   }
 
-  private boolean markOverlappingRanges(
+  private boolean markDisjointRanges(
       String key, HashMap<String, TimeRange> prevTime, TimeRange currTime) {
     TimeRange prev = prevTime.get(key);
     TimeRange curr = currTime;
-    if (prev != null && prev.overlaps(curr)) {
+    boolean overlaps = prev != null && prev.overlaps(curr);
+    if (overlaps) {
       prevTime.put(key, combineOverlappingRanges(prev, curr));
-      return false;
-    } else {
-      return true;
     }
+    return !overlaps;
   }
 
   private void addToList(String key, List<TimeRange> lst, HashMap<String, TimeRange> prevTime,
