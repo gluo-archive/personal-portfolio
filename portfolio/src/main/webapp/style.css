@@ -19,8 +19,9 @@
   margin-top: 20px;
 }
 
-dl li {
-  text-indent: -1.3em;
+ul {
+  list-style-type: disc !important;
+  list-style-position: outside !important;
 }
 
 #load {

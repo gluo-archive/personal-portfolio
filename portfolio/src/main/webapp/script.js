@@ -104,4 +104,32 @@ function updateMaxComments() {
   document.getElementById('max-comments-form')
       .setAttribute('action', '/edit?max_comments=' + val);
 }
+
+function getGithubData() {
+  const repo = 'googleinterns/step50-2020';
+  const username = 'g-luo';
+  let pageIndex = 0;
+  let githubData = [0];
+  let numComments = 0;
+  
+  let fetchRequest = function() {
+    if (githubData.length > 0) {
+      fetch('https://api.github.com/repos/' + repo + '/pulls/comments?page=' + pageIndex + '&per_page=100')
+        .then((response) => response.json())
+        .then((data) => {
+          for (const comment of data) {
+            if (comment.user.login == username) {
+              numComments += 1;
+            }
+          }
+          githubData = data;
+          pageIndex += 1;
+          fetchRequest();
+        });
+    } else {
+      document.getElementById('comment-count').innerHTML = numComments;
+    }
+  }
+  fetchRequest();  
+}
 /* eslint-enable */
